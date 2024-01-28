@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  email       String @unique
+  password    String
+
+  name        String @unique
+  avatarPath  String @default("/uploads/default-avatar.png") @map("avatar_path")
+
+  phone       String @default("")
+
+  order       Order[]
+  favorites   Product[]
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  name          String @unique
+  slug          String @unique
+  images        String
+  description   String
+  price         Int
+
+  orderItems  OrderItem[]
+
+  category      Category? @relation(fields: [categoryId], references: [id])
+  categoryId    Int? @map("category_id")
+
+  user          User? @relation(fields: [userId], references: [id])
+  userId        Int? @map("user_id")
+}
+
+model Category {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  name          String @unique
+  slug          String @unique
+  products      Product[]
+}
+
+model Order {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  status        String
+
+  items         OrderItem[]
+
+  user          User @relation(fields: [userId], references: [id])
+  userId        Int @map("user_id")
+}
+
+model OrderItem {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  quantity      Int
+  price         Int
+
+  order         Order? @relation(fields: [orderId], references: [id])
+  orderId       Int? @map("order_id")
+
+  Product       Product @relation(fields: [productId], references: [id])
+  productId     Int @map("product_id")
+}
