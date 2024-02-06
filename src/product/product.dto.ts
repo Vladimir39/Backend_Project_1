@@ -20,4 +20,7 @@ export class ProductDto implements Prisma.ProductUpdateInput {
 
 	@IsString()
 	slug: string | Prisma.StringFieldUpdateOperationsInput
+
+	@IsString()
+	popular?: boolean | Prisma.BoolFieldUpdateOperationsInput
 }
