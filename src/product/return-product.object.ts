@@ -6,7 +6,6 @@ export const productReturnObject: Prisma.ProductSelect = {
 	id: true,
 	name: true,
 	price: true,
-	createdAt: true,
 	slug: true,
 	categoryId: true,
 	category: true,
