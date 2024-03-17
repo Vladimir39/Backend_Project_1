@@ -35,7 +35,7 @@ model Product {
   description   String
   price         Int
 
-  orderItems  OrderItem[]
+  orderItems    OrderItem[]
 
   category      Category? @relation(fields: [categoryId], references: [id])
   categoryId    Int? @map("category_id")
@@ -81,4 +81,27 @@ model OrderItem {
 
   Product       Product @relation(fields: [productId], references: [id])
   productId     Int @map("product_id")
+}
+
+model Stories {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  name          String
+  images        String
+
+  storiesItem   StoriesItem[]
+}
+
+model StoriesItem {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  description   String
+  images        String
+
+  Stories      Stories? @relation(fields: [storiesId], references: [id])
+  storiesId    Int? @map("stories_id")
 }

@@ -4,12 +4,21 @@ import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
 import { ConfigModule } from '@nestjs/config'
 import { UserModule } from './user/user.module'
-import { ProductModule } from './product/product.module';
-import { CategoryModule } from './category/category.module';
-import { OrderModule } from './order/order.module';
+import { ProductModule } from './product/product.module'
+import { CategoryModule } from './category/category.module'
+import { OrderModule } from './order/order.module'
+import { StoriesModule } from './stories/stories.module'
 
 @Module({
-	imports: [ConfigModule.forRoot(), AuthModule, UserModule, ProductModule, CategoryModule, OrderModule],
+	imports: [
+		ConfigModule.forRoot(),
+		AuthModule,
+		UserModule,
+		ProductModule,
+		CategoryModule,
+		OrderModule,
+		StoriesModule
+	],
 	controllers: [AppController],
 	providers: [AppService]
 })

@@ -34,7 +34,6 @@ export class ProductController {
 	@UsePipes(new ValidationPipe())
 	@Get('by-slug/:slug')
 	async bySlug(@Param('slug') slug: string) {
-		console.log(slug)
 		return this.productService.bySlug(slug)
 	}
 
