@@ -9,5 +9,6 @@ export const productReturnObject: Prisma.ProductSelect = {
 	slug: true,
 	categoryId: true,
 	category: true,
-	popular: true
+	popular: true,
+	countPopular: true
 }

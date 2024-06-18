@@ -5,6 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+
 }
 
 model User {
@@ -14,14 +15,35 @@ model User {
 
   email       String @unique
   password    String
+  phone       String @unique
 
   name        String @unique
   avatarPath  String @default("/uploads/default-avatar.png") @map("avatar_path")
 
-  phone       String @default("")
+ 
+  isPhoneVerified Boolean @default(false)
+  twoFA       Boolean  @default(false)
 
   order       Order[]
   favorites   Product[]
+  Otp         Otp[] 
+}
+
+model Otp {
+    id          Int      @id @default(autoincrement())
+    createdAt   DateTime @default(now()) @map("created_at")
+    updatedAt   DateTime @updatedAt @map("updated_at")
+    userId      Int
+    code        String
+    user        User     @relation(fields: [userId], references: [id])
+    expiresAt DateTime @db.Timestamp(5)
+    useCase   UseCase
+}
+
+enum UseCase {
+  LOGIN    
+  D2FA     
+  PHV      
 }
 
 model Product {
@@ -34,6 +56,7 @@ model Product {
   images        String
   description   String
   price         Int
+  countPopular  Int @default(0)
 
   orderItems    OrderItem[]
 

@@ -23,4 +23,7 @@ export class ProductDto implements Prisma.ProductUpdateInput {
 
 	@IsString()
 	popular?: boolean | Prisma.BoolFieldUpdateOperationsInput
+
+	@IsNumber()
+	countPopular?: number | Prisma.IntFieldUpdateOperationsInput
 }
