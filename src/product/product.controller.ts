@@ -26,6 +26,12 @@ export class ProductController {
 	}
 
 	@UsePipes(new ValidationPipe())
+	@Get()
+	async getAllSous(@Param('ids') ids: string) {
+		return this.productService.getAllSous(ids.split(',').map(id => +id))
+	}
+
+	@UsePipes(new ValidationPipe())
 	@Get(':id')
 	async byId(@Param('id') id: string) {
 		return this.productService.byId(+id)

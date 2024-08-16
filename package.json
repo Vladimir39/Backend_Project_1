@@ -17,7 +17,9 @@
 		"test:watch": "jest --watch",
 		"test:cov": "jest --coverage",
 		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-		"test:e2e": "jest --config ./test/jest-e2e.json"
+		"test:e2e": "jest --config ./test/jest-e2e.json",
+		"prisma:push": "prisma bd push",
+		"prisma:studio": "prisma studio"
 	},
 	"dependencies": {
 		"@faker-js/faker": "^8.3.1",
@@ -28,17 +30,21 @@
 		"@nestjs/mapped-types": "*",
 		"@nestjs/passport": "^10.0.3",
 		"@nestjs/platform-express": "^10.0.0",
+		"@nestjs/typeorm": "^10.0.2",
 		"@prisma/client": "^5.7.1",
 		"argon2": "^0.31.2",
 		"class-transformer": "^0.5.1",
 		"class-validator": "^0.14.0",
+		"cookie-parser": "^1.4.6",
 		"global": "^4.4.0",
 		"joi": "^17.13.1",
+		"mssql": "^10.0.4",
 		"passport": "^0.7.0",
 		"passport-jwt": "^4.0.1",
 		"prisma": "^5.7.1",
 		"reflect-metadata": "^0.1.13",
-		"rxjs": "^7.8.1"
+		"rxjs": "^7.8.1",
+		"typeorm": "^0.3.20"
 	},
 	"devDependencies": {
 		"@nestjs/cli": "^10.0.0",

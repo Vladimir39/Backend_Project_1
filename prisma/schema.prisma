@@ -5,126 +5,142 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  email       String @unique
-  password    String
-  phone       String @unique
-
-  name        String @unique
-  avatarPath  String @default("/uploads/default-avatar.png") @map("avatar_path")
-
- 
-  isPhoneVerified Boolean @default(false)
-  twoFA       Boolean  @default(false)
-
-  order       Order[]
-  favorites   Product[]
-  Otp         Otp[] 
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  email           String    @unique
+  password        String
+  phone           String    @unique
+  name            String    @unique
+  avatarPath      String    @default("/uploads/default-avatar.png") @map("avatar_path")
+  isPhoneVerified Boolean   @default(false)
+  twoFA           Boolean   @default(false)
+  cart            Cart?
+  order           Order[]
+  otp             Otp[]
+  favorites       Product[]
 }
 
 model Otp {
-    id          Int      @id @default(autoincrement())
-    createdAt   DateTime @default(now()) @map("created_at")
-    updatedAt   DateTime @updatedAt @map("updated_at")
-    userId      Int
-    code        String
-    user        User     @relation(fields: [userId], references: [id])
-    expiresAt DateTime @db.Timestamp(5)
-    useCase   UseCase
-}
-
-enum UseCase {
-  LOGIN    
-  D2FA     
-  PHV      
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userId    Int
+  code      String
+  expiresAt DateTime @db.Timestamp(5)
+  useCase   UseCase
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Product {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id           Int          @id @default(autoincrement())
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  name         String       @unique
+  slug         String       @unique
+  images       String
+  description  String
+  price        Int
+  categoryId   Int?         @map("category_id")
+  popular      Boolean      @default(false)
+  userId       Int?         @map("user_id")
+  countPopular Int          @default(0)
+  items        CartItem[]
+  category     Category?    @relation(fields: [categoryId], references: [id])
+  user         User?        @relation(fields: [userId], references: [id])
+  ingredients  Ingredient[] @relation("IngredientToProduct")
+}
 
-  name          String @unique
-  slug          String @unique
-  images        String
-  description   String
-  price         Int
-  countPopular  Int @default(0)
-
-  orderItems    OrderItem[]
-
-  category      Category? @relation(fields: [categoryId], references: [id])
-  categoryId    Int? @map("category_id")
-  popular       Boolean    @default(false)
-
-  user          User? @relation(fields: [userId], references: [id])
-  userId        Int? @map("user_id")
+model Ingredient {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  name      String
+  price     Int
+  imageUrl  String
+  cartItem  CartItem[] @relation("CartItemToIngredient")
+  products  Product[]  @relation("IngredientToProduct")
 }
 
 model Category {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  name      String    @unique
+  slug      String    @unique
+  products  Product[]
+}
 
-  name          String @unique
-  slug          String @unique
-  products      Product[]
+model Cart {
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  token       String
+  totalAmount Int        @default(0)
+  userId      Int?       @unique
+  user        User?      @relation(fields: [userId], references: [id])
+  items       CartItem[]
+}
+
+model CartItem {
+  id          Int          @id @default(autoincrement())
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  quantity    Int          @default(1)
+  cartId      Int
+  productId   Int          @map("product_id")
+  cart        Cart         @relation(fields: [cartId], references: [id])
+  product     Product      @relation(fields: [productId], references: [id])
+  ingredients Ingredient[] @relation("CartItemToIngredient")
 }
 
 model Order {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-
-  status        String
-
-  items         OrderItem[]
-
-  user          User @relation(fields: [userId], references: [id])
-  userId        Int @map("user_id")
-}
-
-model OrderItem {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-
-  quantity      Int
-  price         Int
-
-  order         Order? @relation(fields: [orderId], references: [id])
-  orderId       Int? @map("order_id")
-
-  Product       Product @relation(fields: [productId], references: [id])
-  productId     Int @map("product_id")
+  id          Int         @id @default(autoincrement())
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  address     String
+  comment     String?
+  email       String?
+  fullName    String
+  items       Json
+  phone       String
+  token       String
+  totalAmount Int
+  userId      Int?
+  status      OrderStatus
+  user        User?       @relation(fields: [userId], references: [id])
 }
 
 model Stories {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-
-  name          String
-  images        String
-
-  storiesItem   StoriesItem[]
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  name        String
+  images      String
+  storiesItem StoriesItem[]
 }
 
 model StoriesItem {
-  id            Int      @id @default(autoincrement())
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  description String
+  images      String
+  storiesId   Int?     @map("stories_id")
+  stories     Stories? @relation(fields: [storiesId], references: [id])
+}
 
-  description   String
-  images        String
+enum UseCase {
+  LOGIN
+  D2FA
+  PHV
+}
 
-  Stories      Stories? @relation(fields: [storiesId], references: [id])
-  storiesId    Int? @map("stories_id")
+enum OrderStatus {
+  PENDING
+  SUCCEEDED
+  CANCELLED
 }
