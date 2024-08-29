@@ -1,15 +1,16 @@
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Post, Req, Res } from '@nestjs/common'
 import { OrderService } from './order.service'
-import { Auth } from 'src/auth/decorators/auth.decorator'
-import { CurrentUser } from 'src/auth/decorators/user.decorator'
 
 @Controller('orders')
 export class OrderController {
 	constructor(private readonly orderService: OrderService) {}
 
-	@Get()
-	@Auth()
-	async getAll(@CurrentUser('id') userId: number) {
-		return this.orderService.getAll(userId)
+	@Post()
+	async createPost(@Req() request: Request, @Res() res: Response) {
+		const token = request.headers['authorization']
+		const data = request.body
+		console.log(token)
+		console.log(request.body)
+		return res.json
 	}
 }
