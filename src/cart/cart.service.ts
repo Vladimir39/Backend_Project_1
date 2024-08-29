@@ -353,11 +353,19 @@ export class CartService {
 			}
 		})
 
-		return await this.prisma.cart.update({
+		await this.prisma.cart.update({
 			where: {
 				id: userCart.id
+			},
+			data: {
+				totalAmount: 0
 			}
 		})
-		console.log(userCart)
+		await this.prisma.cartItem.deleteMany({
+			where: {
+				cartId: userCart.id
+			}
+		})
+		
 	}
 }

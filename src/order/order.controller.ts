@@ -36,9 +36,9 @@ export class OrderController {
 			throw new BadRequestException('Cart is empty')
 		}
 
-		const order = await this.orderService.createOrder(cart, dataOrder)
+		await this.orderService.createOrder(cart, dataOrder)
 
-		const updateCart = await this.cartService.updateCartOrder(cart.token)
+		await this.cartService.updateCartOrder(cart.token)
 
 		return token
 	}
