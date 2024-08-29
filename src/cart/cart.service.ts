@@ -345,4 +345,19 @@ export class CartService {
 
 		return { items, totalAmount, token }
 	}
+
+	async updateCartOrder(token: string) {
+		const userCart = await this.prisma.cart.findFirst({
+			where: {
+				token
+			}
+		})
+
+		return await this.prisma.cart.update({
+			where: {
+				id: userCart.id
+			}
+		})
+		console.log(userCart)
+	}
 }
