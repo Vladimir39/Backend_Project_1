@@ -1,5 +1,6 @@
 import { Address } from './dto/order.dto'
 import { CartService } from './../cart/cart.service'
+import { Request, Response } from 'express'
 import {
 	BadRequestException,
 	Body,
@@ -9,7 +10,6 @@ import {
 	Res
 } from '@nestjs/common'
 import { OrderService } from './order.service'
-import { Order as OrderModel } from '@prisma/client'
 
 @Controller('orders')
 export class OrderController {
@@ -23,9 +23,9 @@ export class OrderController {
 		@Req() request: Request,
 		@Res() res: Response,
 		@Body() dataOrder: Address
-	): Promise<OrderModel> {
+	) {
 		const token = request.headers['authorization']
-
+		console.log(dataOrder)
 		const cart = await this.cartService.getCart(token)
 
 		if (!cart) {
@@ -37,9 +37,14 @@ export class OrderController {
 		}
 
 		await this.orderService.createOrder(cart, dataOrder)
-
 		await this.cartService.updateCartOrder(cart.token)
 
-		return token
+		const order = {
+			count: 1,
+			url: 'http://localhost:3000/'
+		}
+
+		return res.json(order)
+		//return res.status(201).json('http://localhost:3000/')
 	}
 }
