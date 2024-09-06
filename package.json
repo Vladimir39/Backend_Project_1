@@ -39,11 +39,13 @@
 		"global": "^4.4.0",
 		"joi": "^17.13.1",
 		"mssql": "^10.0.4",
+		"nestjs-telegraf": "^2.8.1",
 		"passport": "^0.7.0",
 		"passport-jwt": "^4.0.1",
 		"prisma": "^5.7.1",
 		"reflect-metadata": "^0.1.13",
 		"rxjs": "^7.8.1",
+		"telegraf": "^4.16.3",
 		"typeorm": "^0.3.20"
 	},
 	"devDependencies": {

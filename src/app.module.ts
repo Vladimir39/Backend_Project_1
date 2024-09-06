@@ -8,18 +8,22 @@ import { ProductModule } from './product/product.module'
 import { CategoryModule } from './category/category.module'
 import { OrderModule } from './order/order.module'
 import { StoriesModule } from './stories/stories.module'
-import { CartModule } from './cart/cart.module';
+import { CartModule } from './cart/cart.module'
+import { TelegramModule } from './telegram/telegram.module'
+import { TelegrafModule } from 'nestjs-telegraf'
 
 @Module({
 	imports: [
 		ConfigModule.forRoot(),
+		TelegrafModule,
 		AuthModule,
 		UserModule,
 		ProductModule,
 		CategoryModule,
 		OrderModule,
 		StoriesModule,
-		CartModule
+		CartModule,
+		TelegramModule
 	],
 	controllers: [AppController],
 	providers: [AppService]

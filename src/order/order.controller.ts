@@ -10,12 +10,14 @@ import {
 	Res
 } from '@nestjs/common'
 import { OrderService } from './order.service'
+import { TelegramService } from 'src/telegram/telegram.service'
 
 @Controller('orders')
 export class OrderController {
 	constructor(
 		private readonly orderService: OrderService,
-		private readonly cartService: CartService
+		private readonly cartService: CartService,
+		private readonly telegramService: TelegramService
 	) {}
 
 	@Post()
@@ -36,15 +38,17 @@ export class OrderController {
 			throw new BadRequestException('Cart is empty')
 		}
 
-		await this.orderService.createOrder(cart, dataOrder)
+		const orderBuy = await this.orderService.createOrder(cart, dataOrder)
+		console.log(orderBuy)
 		await this.cartService.updateCartOrder(cart.token)
 
 		const order = {
-			count: 1,
+			count: orderBuy.id,
 			url: 'http://localhost:3000/'
 		}
 
+		await this.telegramService.orderAdmin(orderBuy)
+
 		return res.json(order)
-		//return res.status(201).json('http://localhost:3000/')
 	}
 }
