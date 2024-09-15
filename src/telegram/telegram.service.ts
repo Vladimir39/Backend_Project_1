@@ -12,7 +12,7 @@ export class TelegramService {
 	}
 
 	async orderAdmin(orderBuy: Order) {
-		const adminChatId = ['1144477936', '1144477936']
+		const adminChatId = ['1144477936']
 		await adminChatId.forEach(adminChatId => {
 			this.bot.telegram.sendMessage(
 				adminChatId,
