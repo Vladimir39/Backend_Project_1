@@ -39,7 +39,6 @@ export class OrderController {
 		}
 
 		const orderBuy = await this.orderService.createOrder(cart, dataOrder)
-		console.log(orderBuy)
 		await this.cartService.updateCartOrder(cart.token)
 
 		const order = {
