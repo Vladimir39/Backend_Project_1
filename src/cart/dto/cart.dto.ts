@@ -10,6 +10,7 @@ export type CartStateItem = {
 	quantity: number
 	name: string
 	imageUrl: string
+	categoryId: number
 	price: number
 	ingredients: Array<{ name: string; price: number }>
 }

@@ -36,22 +36,44 @@ model Otp {
 }
 
 model Product {
-  id           Int          @id @default(autoincrement())
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime     @updatedAt @map("updated_at")
-  name         String       @unique
-  slug         String       @unique
+  id           Int                   @id @default(autoincrement())
+  createdAt    DateTime              @default(now()) @map("created_at")
+  updatedAt    DateTime              @updatedAt @map("updated_at")
+  name         String                @unique
+  slug         String                @unique
   images       String
   description  String
   price        Int
-  categoryId   Int?         @map("category_id")
-  popular      Boolean      @default(false)
-  userId       Int?         @map("user_id")
-  countPopular Int          @default(0)
+  categoryId   Int?                  @map("category_id")
+  popular      Boolean               @default(false)
+  userId       Int?                  @map("user_id")
+  countPopular Int                   @default(0)
   items        CartItem[]
-  category     Category?    @relation(fields: [categoryId], references: [id])
-  user         User?        @relation(fields: [userId], references: [id])
-  ingredients  Ingredient[] @relation("IngredientToProduct")
+  category     Category?             @relation(fields: [categoryId], references: [id])
+  user         User?                 @relation(fields: [userId], references: [id])
+  restaurants  RestaurantOnProduct[]
+  ingredients  Ingredient[]          @relation("IngredientToProduct")
+}
+
+model Restaurant {
+  id        Int                   @id @default(autoincrement())
+  createdAt DateTime              @default(now()) @map("created_at")
+  updatedAt DateTime              @updatedAt @map("updated_at")
+  name      String                @unique
+  address   String
+  products  RestaurantOnProduct[]
+}
+
+model RestaurantOnProduct {
+  id           Int        @id @default(autoincrement())
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  productId    Int
+  restaurantId Int
+  product      Product    @relation(fields: [productId], references: [id])
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+
+  @@unique([productId, restaurantId])
 }
 
 model Ingredient {
@@ -72,6 +94,7 @@ model Category {
   name      String    @unique
   slug      String    @unique
   products  Product[]
+  
 }
 
 model Cart {
@@ -98,20 +121,25 @@ model CartItem {
 }
 
 model Order {
-  id          Int         @id @default(autoincrement())
-  createdAt   DateTime    @default(now()) @map("created_at")
-  updatedAt   DateTime    @updatedAt @map("updated_at")
-  address     String
-  comment     String?
-  email       String?
-  fullName    String
-  items       Json
-  phone       String
-  token       String
-  totalAmount Int
-  userId      Int?
-  status      OrderStatus
-  user        User?       @relation(fields: [userId], references: [id])
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  address      String
+  code         String
+  flat         String?
+  entrance     String?
+  floor        String?
+  comment      String?
+  fullName     String
+  items        Json
+  phone        String
+  token        String
+  totalAmount  Int
+  userId       Int?
+  status       OrderStatus
+  timeDelivery String
+  delivery     String
+  user         User?       @relation(fields: [userId], references: [id])
 }
 
 model Stories {

@@ -31,9 +31,20 @@ export class CategoryService {
 		return category
 	}
 
-	async getAll() {
+	async getAll(restaurantId: number) {
 		return this.prisma.category.findMany({
-			select: returnCategoryObject
+			select: {
+				...returnCategoryObject,
+				products: {
+					where: {
+						restaurants: {
+							some: {
+								restaurantId
+							}
+						}
+					}
+				}
+			}
 		})
 	}
 

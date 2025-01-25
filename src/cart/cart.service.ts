@@ -8,6 +8,7 @@ export type CartStateItem = {
 	quantity: number
 	name: string
 	imageUrl: string
+	categoryId: number
 	price: number
 	ingredients: Array<{ name: string; price: number }>
 }
@@ -36,14 +37,20 @@ export class CartService {
 							createdAt: 'desc'
 						},
 						include: {
-							product: true,
+							product: {
+								include: {
+									category: {
+										select: {
+											name: true
+										}
+									}
+								}
+							},
 							ingredients: true
 						}
 					}
 				}
 			})
-
-			//
 
 			const totalAmount = cart.totalAmount
 
@@ -53,11 +60,13 @@ export class CartService {
 				product: item.product,
 				ingredients: item.ingredients
 			}))
-
-			const items: CartStateItem[] = data.map(item => ({
+			console.log(data)
+			const items: CartStateItem[] = data.map((item, index) => ({
 				id: item.id,
 				quantity: item.quantity,
 				name: item.product.name,
+				categoryId: item.product.categoryId,
+				category: cart.items[index].product.category.name,
 				imageUrl: item.product.images,
 				price: calcCartItemTotalPrice(item),
 				ingredients: item.ingredients.map(ingredient => ({
@@ -161,7 +170,15 @@ export class CartService {
 						createdAt: 'desc'
 					},
 					include: {
-						product: true,
+						product: {
+							include: {
+								category: {
+									select: {
+										name: true
+									}
+								}
+							}
+						},
 						ingredients: true
 					}
 				}
@@ -174,11 +191,12 @@ export class CartService {
 			ingredients: item.ingredients
 		}))
 
-		const items: CartStateItem[] = data.map(item => ({
+		const items: CartStateItem[] = data.map((item, index) => ({
 			id: item.id,
-
 			quantity: item.quantity,
 			name: item.product.name,
+			categoryId: item.product.categoryId,
+			category: cart.items[index].product.category.name,
 			imageUrl: item.product.images,
 			price: calcCartItemTotalPrice(item),
 			ingredients: item.ingredients.map(ingredient => ({
@@ -246,7 +264,15 @@ export class CartService {
 						createdAt: 'desc'
 					},
 					include: {
-						product: true,
+						product: {
+							include: {
+								category: {
+									select: {
+										name: true
+									}
+								}
+							}
+						},
 						ingredients: true
 					}
 				}
@@ -259,10 +285,12 @@ export class CartService {
 			ingredients: item.ingredients
 		}))
 
-		const items: CartStateItem[] = data.map(item => ({
+		const items: CartStateItem[] = data.map((item, index) => ({
 			id: item.id,
 			quantity: item.quantity,
 			name: item.product.name,
+			categoryId: item.product.categoryId,
+			category: cart.items[index].product.category.name,
 			imageUrl: item.product.images,
 			price: calcCartItemTotalPrice(item),
 			ingredients: item.ingredients.map(ingredient => ({
@@ -318,7 +346,15 @@ export class CartService {
 						createdAt: 'desc'
 					},
 					include: {
-						product: true,
+						product: {
+							include: {
+								category: {
+									select: {
+										name: true
+									}
+								}
+							}
+						},
 						ingredients: true
 					}
 				}
@@ -331,10 +367,12 @@ export class CartService {
 			ingredients: item.ingredients
 		}))
 
-		const items: CartStateItem[] = data.map(item => ({
+		const items: CartStateItem[] = data.map((item, index) => ({
 			id: item.id,
 			quantity: item.quantity,
 			name: item.product.name,
+			categoryId: item.product.categoryId,
+			category: cart.items[index].product.category.name,
 			imageUrl: item.product.images,
 			price: calcCartItemTotalPrice(item),
 			ingredients: item.ingredients.map(ingredient => ({
@@ -366,6 +404,5 @@ export class CartService {
 				cartId: userCart.id
 			}
 		})
-		
 	}
 }

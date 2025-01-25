@@ -26,4 +26,7 @@ export class ProductDto implements Prisma.ProductUpdateInput {
 
 	@IsNumber()
 	countPopular?: number | Prisma.IntFieldUpdateOperationsInput
+
+	@IsNumber()
+	category?: Prisma.CategoryUpdateOneWithoutProductsNestedInput
 }

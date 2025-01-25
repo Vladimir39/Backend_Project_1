@@ -21,8 +21,6 @@ export class CartController {
 
 	@Get()
 	async getCart(@Req() request: Request) {
-		// const token = request.cookies['cartToken']
-		// console.log(token)
 		const token = request.headers['authorization']
 
 		if (!token) {
@@ -36,8 +34,6 @@ export class CartController {
 		@Req() request: Request,
 		@Res() res: Response
 	): Promise<Response<CartDTO>> {
-		//let token = request.cookies['cartToken']
-
 		let token = request.headers['authorization']
 
 		if (!token) {
@@ -72,7 +68,6 @@ export class CartController {
 		@Body() cartStateItem: CartStateItem
 	) {
 		const token = request.headers['authorization']
-		//const token = request.cookies['cartToken']
 
 		const data = (await cartStateItem) as { quantity: number }
 		const id = Number(cartId)
@@ -90,7 +85,6 @@ export class CartController {
 		@Body() cartStateItem: CartStateItem
 	) {
 		const token = request.headers['authorization']
-		//const token = request.cookies['authorization']
 
 		const id = Number(cartId)
 		const data = (await cartStateItem) as { quantity: number }

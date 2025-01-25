@@ -7,6 +7,7 @@ import {
 	Param,
 	Post,
 	Put,
+	Query,
 	UsePipes,
 	ValidationPipe
 } from '@nestjs/common'
@@ -19,8 +20,9 @@ export class CategoryController {
 	constructor(private readonly categoryService: CategoryService) {}
 
 	@Get()
-	async getAll() {
-		return this.categoryService.getAll()
+	async getAll(@Query('restaurantId') restaurantId: number) {
+		console.log(restaurantId)
+		return this.categoryService.getAll(+restaurantId)
 	}
 
 	@Get('by-slug/:slug')

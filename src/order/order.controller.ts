@@ -27,7 +27,6 @@ export class OrderController {
 		@Body() dataOrder: Address
 	) {
 		const token = request.headers['authorization']
-		console.log(dataOrder)
 		const cart = await this.cartService.getCart(token)
 
 		if (!cart) {
@@ -44,6 +43,7 @@ export class OrderController {
 		const order = {
 			count: orderBuy.id,
 			url: 'http://localhost:3000/'
+			//url: 'http://91.222.238.161/'
 		}
 
 		await this.telegramService.orderAdmin(orderBuy)

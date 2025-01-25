@@ -12,12 +12,18 @@ export class OrderService {
 		return await this.prisma.order.create({
 			data: {
 				token: cart.token,
-				fullName: dataOrder.firstName + ' ' + dataOrder.lastName,
-				email: dataOrder.email,
+				fullName: dataOrder.firstName,
+				//email: dataOrder.email,
 				phone: dataOrder.phone,
+				delivery: dataOrder.delivery,
 				address: dataOrder.address,
+				code: dataOrder.code,
+				flat: dataOrder.flat,
+				entrance: dataOrder.entrance,
+				floor: dataOrder.floor,
 				comment: dataOrder.comment,
 				totalAmount: cart.totalAmount,
+				timeDelivery: dataOrder.time,
 				status: OrderStatus.PENDING,
 				items: JSON.stringify(cart.items)
 			}
