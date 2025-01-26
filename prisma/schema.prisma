@@ -44,6 +44,7 @@ model Product {
   images       String
   description  String
   price        Int
+  availability Boolean?              @default(false)
   categoryId   Int?                  @map("category_id")
   popular      Boolean               @default(false)
   userId       Int?                  @map("user_id")

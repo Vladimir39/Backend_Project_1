@@ -29,4 +29,7 @@ export class ProductDto implements Prisma.ProductUpdateInput {
 
 	@IsNumber()
 	category?: Prisma.CategoryUpdateOneWithoutProductsNestedInput
+
+	@IsNumber()
+	availability?: boolean | Prisma.NullableBoolFieldUpdateOperationsInput
 }
