@@ -17,7 +17,7 @@ export class OrderService {
 				phone: dataOrder.phone,
 				delivery: dataOrder.delivery,
 				address: dataOrder.address,
-				code: dataOrder.code,
+				house: dataOrder.house,
 				flat: dataOrder.flat,
 				entrance: dataOrder.entrance,
 				floor: dataOrder.floor,

@@ -60,7 +60,7 @@ export class CartService {
 				product: item.product,
 				ingredients: item.ingredients
 			}))
-			console.log(data)
+
 			const items: CartStateItem[] = data.map((item, index) => ({
 				id: item.id,
 				quantity: item.quantity,

@@ -26,7 +26,8 @@ export class OrderController {
 		@Res() res: Response,
 		@Body() dataOrder: Address
 	) {
-		const token = request.headers['authorization']
+		//const token = request.headers['authorization']
+		const token = request.cookies['client_token1']
 		const cart = await this.cartService.getCart(token)
 
 		if (!cart) {
@@ -42,9 +43,16 @@ export class OrderController {
 
 		const order = {
 			count: orderBuy.id,
+			//url: 'https://dimshashlik.ru/'
 			url: 'http://localhost:3000/'
 			//url: 'http://91.222.238.161/'
 		}
+
+		res.cookie('client_token1', '', {
+			httpOnly: true,
+			maxAge: 0,
+			path: '/'
+		})
 
 		await this.telegramService.orderAdmin(orderBuy)
 

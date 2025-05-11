@@ -11,6 +11,7 @@ import { StoriesModule } from './stories/stories.module'
 import { CartModule } from './cart/cart.module'
 import { TelegramModule } from './telegram/telegram.module'
 import { TelegrafModule } from 'nestjs-telegraf'
+import { AddressModule } from './address/address.module'
 
 @Module({
 	imports: [
@@ -23,7 +24,8 @@ import { TelegrafModule } from 'nestjs-telegraf'
 		OrderModule,
 		StoriesModule,
 		CartModule,
-		TelegramModule
+		TelegramModule,
+		AddressModule
 	],
 	controllers: [AppController],
 	providers: [AppService]

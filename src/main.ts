@@ -6,7 +6,11 @@ async function bootstrap() {
 	const app = await NestFactory.create(AppModule)
 
 	app.setGlobalPrefix('api')
-	app.enableCors()
+	app.enableCors({
+		origin: ['https://dimshashlik.ru/', 'http://localhost:3000'], // Разрешенные источники
+		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Разрешенные методы
+		credentials: true // Если нужны куки или авторизация
+	})
 	app.use(cookieParser())
 	await app.listen(3001)
 }

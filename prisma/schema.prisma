@@ -107,6 +107,7 @@ model Cart {
   userId      Int?       @unique
   user        User?      @relation(fields: [userId], references: [id])
   items       CartItem[]
+  address     Address[]
 }
 
 model CartItem {
@@ -121,12 +122,26 @@ model CartItem {
   ingredients Ingredient[] @relation("CartItemToIngredient")
 }
 
+model Address {
+  id          Int          @id @default(autoincrement())
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  type        String    
+  addressHome String
+  house       String
+  flat        String
+  entrance    String
+  floor       String
+  cartId      Int?
+  cart        Cart?         @relation(fields: [cartId], references: [id])
+}
+
 model Order {
   id           Int         @id @default(autoincrement())
   createdAt    DateTime    @default(now()) @map("created_at")
   updatedAt    DateTime    @updatedAt @map("updated_at")
   address      String
-  code         String
+  house        String
   flat         String?
   entrance     String?
   floor        String?

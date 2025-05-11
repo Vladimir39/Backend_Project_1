@@ -5,47 +5,70 @@ import { Telegraf } from 'telegraf'
 @Injectable()
 export class TelegramService {
 	private bot: Telegraf
+
 	constructor() {
 		const token = process.env.TELEGRAM_BOT_TOKEN
 		this.bot = new Telegraf(token)
 	}
 
-	async orderAdmin(orderBuy: Order) {
-		const adminChatId = ['1144477936']
+	private buildOrderMessage(orderBuy: Order): string {
 		const items = JSON.parse(orderBuy.items as string)
 
-		console.log(items)
+		const orderDetails = items
+			.map(obj => {
+				const ingredientsList = obj.ingredients?.length
+					? obj.ingredients
+							.map(item => `Доп. к блюду: ${item.name} 1 ед.`)
+							.join('\n')
+					: ''
+				return `*********************************\n${obj.category.toUpperCase()} - ${
+					obj.name
+				}
+${ingredientsList}
+Всего ${obj.quantity} ед. - стоимость ${obj.price}р. за ед.
+*********************************`
+			})
+			.join('\n')
 
-		const order = items.map(
-			obj =>
-				`*${obj.category.toUpperCase()} - ${obj.name}
-		Дополнительно к блюду:\n${obj.ingredients.map(item => item.name).join(';\n')}
-		Всего *${obj.quantity}* ед. - стоимость *${obj.price}р.* за ед.\n
-		********************************* \n`
-		)
-		await adminChatId.forEach(adminChatId => {
-			this.bot.telegram.sendMessage(
-				adminChatId,
-				`*Номер заказа:* ${orderBuy.id}
-				
-				*Тип: ${orderBuy.delivery.toUpperCase()}*
-				*Адрес:* 
-				Улица: ---	${orderBuy.address.toUpperCase()}
-				Квартира: ---	${orderBuy.flat}
-				Подъезд: ---	${orderBuy.entrance}
-				Код двери: ---	${orderBuy.code}
-				Этаж: --- ${orderBuy.floor}
-				Время доставки: --- ${orderBuy.timeDelivery}
-				Доп. информация: --- ${orderBuy.comment}
+		const fields: string[] = []
 
-				*--ДАННЫЕ ПО КЛИЕНТУ--*
-				Имя: --------------- ${orderBuy.fullName}
-				Номер телефона: ---- ${orderBuy.phone}
-				
-				*Блюда:*
-				${order}
-				*Сумма по заказу:* *${orderBuy.totalAmount}.00р.*`
-			)
-		})
+		if (orderBuy.id) fields.push(`Номер заказа: ${orderBuy.id}`)
+		if (orderBuy.delivery)
+			fields.push(`-- ТИП: ${orderBuy.delivery.toUpperCase()} --`)
+		if (orderBuy.address) fields.push(`Улица: - ${orderBuy.address}`)
+		if (orderBuy.house) fields.push(`Номер дома: - ${orderBuy.house}`)
+		if (orderBuy.flat) fields.push(`Квартира: - ${orderBuy.flat}`)
+		if (orderBuy.entrance) fields.push(`Подъезд: - ${orderBuy.entrance}`)
+		if (orderBuy.floor) fields.push(`Этаж: - ${orderBuy.floor}`)
+		if (orderBuy.timeDelivery)
+			fields.push(`Время доставки: - ${orderBuy.timeDelivery}`)
+		if (orderBuy.comment) fields.push(`Доп. информация: - ${orderBuy.comment}`)
+
+		fields.push('-- ДАННЫЕ ПО КЛИЕНТУ --')
+		if (orderBuy.fullName) fields.push(`Имя: - ${orderBuy.fullName}`)
+		if (orderBuy.phone) fields.push(`Номер телефона: - ${orderBuy.phone}`)
+
+		fields.push('\n==================\n')
+		if (orderDetails) fields.push(`Блюда:\n${orderDetails}`)
+		if (orderBuy.totalAmount)
+			fields.push(`Сумма по заказу: ${orderBuy.totalAmount}.00р.`)
+
+		return fields.join('\n')
+	}
+
+	async orderAdmin(orderBuy: Order) {
+		const adminChatIds = [
+			'1144477936',
+			'5114637480',
+			'5205922440',
+			'5656520171',
+			'5864038346',
+			'5805596687'
+		]
+		const message = this.buildOrderMessage(orderBuy)
+
+		for (const chatId of adminChatIds) {
+			await this.bot.telegram.sendMessage(chatId, message)
+		}
 	}
 }

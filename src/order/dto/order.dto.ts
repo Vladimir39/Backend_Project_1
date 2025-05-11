@@ -7,7 +7,7 @@ export type Address = {
 	phone: string
 	delivery: string
 	address: string
-	code: string
+	house: string
 	flat: string
 	entrance: string
 	floor: string
