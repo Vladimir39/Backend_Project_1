@@ -1,4 +1,3 @@
-import { refreshTokenDto } from './dto/refresh-token.dto'
 import {
 	BadRequestException,
 	Injectable,

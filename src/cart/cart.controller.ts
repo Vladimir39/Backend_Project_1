@@ -72,17 +72,17 @@ export class CartController {
 
 	@Delete(':cartId')
 	async deleteCart(
-		@Req() request: Request,
-		@Param('cartId') cartId: string,
-		@Body() cartStateItem: CartStateItem
+		@Req() request: Request
+		// @Param('cartId') cartId: string,
+		// @Body() cartStateItem: CartStateItem
 	) {
 		const token = request.cookies['client_token1']
-		const id = Number(cartId)
-		const data = (await cartStateItem) as { quantity: number }
+		// const id = Number(cartId)
+		// const data = (await cartStateItem) as { quantity: number }
 
 		if (!token) {
 			throw new BadRequestException('Нет Токена')
 		}
-		return this.cartService.deleteCart(token, id, data.quantity)
+		return this.cartService.deleteCart(token /*id, data.quantity*/)
 	}
 }

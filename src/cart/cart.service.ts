@@ -302,16 +302,12 @@ export class CartService {
 		return { items, totalAmount, token }
 	}
 
-	async deleteCart(
-		token: string,
-		id: number,
-		quantity: number
-	): Promise<CartDTO> {
-		const deleteItemCart = await this.prisma.cartItem.deleteMany({
-			where: {
-				id
-			}
-		})
+	async deleteCart(token: string /*id: number*/): Promise<CartDTO> {
+		// const deleteItemCart = await this.prisma.cartItem.deleteMany({
+		// 	where: {
+		// 		id
+		// 	}
+		// })
 		const userCart = await this.prisma.cart.findFirst({
 			where: {
 				token

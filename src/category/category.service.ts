@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { returnCategoryObject } from './return-category.object'
-import { Prisma } from '@prisma/client'
 import { PrismaService } from 'src/prisma.service'
 import { CategoryDto } from './category.dto'
 
