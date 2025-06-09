@@ -8,7 +8,7 @@ import {
 	Res
 } from '@nestjs/common'
 import { AddressService } from './address.service'
-import { Response, Request, response } from 'express'
+import { Response, Request } from 'express'
 import { AddressDto } from './dto/address.dto'
 import { randomUUID } from 'crypto'
 import { CartService } from 'src/cart/cart.service'

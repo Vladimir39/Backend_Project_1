@@ -26,7 +26,6 @@ export class OrderController {
 		@Res() res: Response,
 		@Body() dataOrder: Address
 	) {
-		//const token = request.headers['authorization']
 		const token = request.cookies['client_token1']
 		const cart = await this.cartService.getCart(token)
 
@@ -43,9 +42,7 @@ export class OrderController {
 
 		const order = {
 			count: orderBuy.id,
-			//url: 'https://dimshashlik.ru/'
-			url: 'http://localhost:3000/'
-			//url: 'http://91.222.238.161/'
+			url: 'https://dimshashlik.ru/'
 		}
 
 		res.cookie('client_token1', '', {

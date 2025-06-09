@@ -13,7 +13,6 @@ import {
 import { CartService } from './cart.service'
 import { Request, Response } from 'express'
 import { CartDTO, CartStateItem, CreateCartItemValues } from './dto/cart.dto'
-import { randomUUID } from 'crypto'
 
 @Controller('cart')
 export class CartController {
@@ -21,7 +20,6 @@ export class CartController {
 
 	@Get()
 	async getCart(@Req() request: Request) {
-		//const token = request.headers['authorization']
 		const token = request.cookies['client_token1']
 		if (!token) {
 			throw new BadRequestException('Не удалось получить корзину')
@@ -34,11 +32,7 @@ export class CartController {
 		@Req() request: Request,
 		@Res() res: Response
 	): Promise<Response<CartDTO>> {
-		//let token = request.headers['authorization']
 		const token = request.cookies['client_token1']
-		// if (!token) {
-		// 	token = randomUUID()
-		// }
 
 		const userCart = await this.cartService.findOrCreateCart(token)
 
@@ -57,7 +51,6 @@ export class CartController {
 
 		const updatedUserCart = await this.cartService.updateCartTotalAmount(token)
 
-		//res.cookie('cartToken', token)
 		return res.json(updatedUserCart)
 	}
 
@@ -67,7 +60,6 @@ export class CartController {
 		@Param('cartId') cartId: string,
 		@Body() cartStateItem: CartStateItem
 	) {
-		//const token = request.headers['authorization']
 		const token = request.cookies['client_token1']
 		const data = (await cartStateItem) as { quantity: number }
 		const id = Number(cartId)
@@ -84,7 +76,6 @@ export class CartController {
 		@Param('cartId') cartId: string,
 		@Body() cartStateItem: CartStateItem
 	) {
-		//const token = request.headers['authorization']
 		const token = request.cookies['client_token1']
 		const id = Number(cartId)
 		const data = (await cartStateItem) as { quantity: number }
